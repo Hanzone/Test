@@ -17,6 +17,7 @@ public class Test {
     private static void testMethod() {
 
         System.out.print("ooooooopps");
+        System.out.print("ooooooopps");
 
     }
 }
