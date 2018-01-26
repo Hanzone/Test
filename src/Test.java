@@ -1,50 +1,116 @@
-import javax.jnlp.ExtendedService;
-import java.util.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by haorenpu on 2017/2/20.
  */
-public class Test<E, V> {
-    public static void main(String args[]) throws Exception{
+public class Test {
 
-//        System.out.println("Hell Yeah!");
-//        System.out.println("Hell Yeah!");
-//        System.out.print("Hell Yeah!");
 
-        Set<String> s1 = new HashSet<>();
-        Set<String> s2 = new HashSet<>();
+    public static void main(String args[]) throws Exception {
 
-        //testMethod(s1, s2);
 
-//        for (SmsSendConfig s : SmsSendConfig.values()) {
-//            System.out.println(s);
-//            System.out.println(s.ordinal());
-//        }
-//
-//        Father s = new Son();
-        EnumDemo.A.apply();
+
+
+
+        Integer.valueOf("11.0");
+
+        print(getString(new BigDecimal("2222.455000")));
+
+
+
+    }
+
+    private static void print(Object t) {
+        System.out.println(t);
+    }
+
+    public static String getPrettyNumber(Object obj) {
+        return BigDecimal.valueOf(getDouble(obj))
+                .stripTrailingZeros().toString();
     }
 
     /**
-     * do testing thing
+     * obj 转换成BigDecimal
+     * @param obj
+     * @return
      */
-    private void testMethod(Set<? extends E> s1, Set<V> s2) throws Exception{
-
-
-        //Set<E> result = new HashSet<E>(s1);
-        //result.addAll(s2);
-        //return result;
-
-
+    public static BigDecimal getBigDecimal(Object obj) {
+        double num = getDouble(obj);
+        return new BigDecimal(String.valueOf(num));
     }
 
-    private enum SmsSendConfig {
-
-        ALIDAYU,
-        ALIDAYU2,
-        ALIDAYU3,
-        ALIDAYU4,
-        MWXJK;
+    public static double getDouble(Object obj){
+        double res = 0;
+        if(obj instanceof Integer){
+            res = (Integer)obj;
+        }else if(obj instanceof Float){
+            res = (Float)obj;
+        }else if(obj instanceof Double){
+            res = (Double)obj;
+        }else if(obj instanceof Number){
+            Number num = (Number)obj;
+            res = num.doubleValue();
+        }else{
+            try{
+                res= Double.parseDouble(getString(obj));
+            }catch(Exception e){}
+        }
+        return res;
     }
+
+    public static float getFloat(Object obj){
+        float res = 0;
+        if(obj instanceof Integer){
+            res = (Integer)obj;
+        }else if(obj instanceof Float){
+            res = (Float)obj;
+        }else if(obj instanceof Number){
+            Number num = (Number)obj;
+            res = num.floatValue();
+        }else{
+            try{
+                res= Float.parseFloat(getString(obj));
+            }catch(Exception e){}
+        }
+        return res;
+    }
+
+    public static String getString(Object obj) {
+        if (null == obj) {
+            return "";
+        }
+        if (obj instanceof String) {
+            return (String) obj;
+        } else {
+            return obj.toString();
+        }
+    }
+    public static boolean isDecimal(String value, int len1, int len2) {
+        if (value == null || "".equals(value)) {
+            return false;
+        }
+        boolean checkFloat = false;
+        checkFloat = value.matches("^\\-?([0-9]\\d*)(\\.\\d+)?$");
+        if (checkFloat) {
+            String[] ar = value.split("[.]");
+            if (ar.length == 2) {
+                if (ar[0].replaceAll("-", "").length() > len1 || ar[1].length() > len2) {
+                    checkFloat = false;
+                }
+            } else if (ar.length == 1) {
+                if (ar[0].replaceAll("-", "").length() > len1) {
+                    checkFloat = false;
+                }
+            } else {
+                checkFloat = false;
+            }
+        }
+        return checkFloat;
+    }
+
 
 }
