@@ -19,6 +19,12 @@ public class Father {
 //        System.out.println(s);
 //    }
 
+    static {
+        System.out.println("Father init");
+    }
+
+    public static final String HELLO = "HELLO";
+
     protected void method1(Father f) throws IOException {
         BufferedWriter bw = new BufferedWriter(new PrintWriter(System.out));
         bw.write("father method1");
