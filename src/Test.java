@@ -1,16 +1,11 @@
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Created by haorenpu on 2017/2/20.
  */
-public class Test {
+class Test {
 
 
     static int ii;
@@ -19,23 +14,91 @@ public class Test {
     public static void main(String args[]) throws Exception {
 
 
-        //print(getInt("1.000"));
 
-//        String s = null;
-////        print("null".equals(s));
 //
-//        print(Integer.parseInt("1.00"));
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("GainQuantity", "1.20000");
+//        map.put("activityQuantity", new BigDecimal("100.20000"));
+//        map.put("actiQuantity", new BigDecimal("100.0000"));
+//        map.pu`t(null, new BigDecimal("100.0000"));
+//
+//        Son son = new Son();
+//        //map.put("son", son);
+//
+//        List list = new ArrayList();
+//        list.add(map);
+//        list.add("100.00");
+//        list.add(son);
+//        list.add(null);
+//        Map map1 = dealMapTrimQuantityZero(map);
+//        print("sas");
 
-//        print(getInt("010000".split("\\.")[0]));
+
+//        Scanner in = new Scanner(System.in);
+//        while (true) {
+//            String i = in.nextLine();
+//            print(i);
+//            if ("1.2".equals(i)) break;
+//        }
 
 
-        print(new BigDecimal(1).divide(new BigDecimal(3), 2, BigDecimal.ROUND_HALF_UP));
+        print(testFinally());
+    }
 
+    static private int testFinally(){
+
+        int x;
+        try {
+            x = 10;
+            return x;
+        } finally {
+            x = 30;
+            //return x;
+        }
 
     }
 
     public void pp() {
         print(Test.this.getClass() == this.getClass());
+    }
+
+    public static Map dealMapTrimQuantityZero(Map<String,Object> map){
+
+        Map<String,Object> dealedMap = new HashMap<String,Object>();
+
+        for(Map.Entry<String, Object> temp : map.entrySet()){
+
+            //取得map中的value
+            Object value = temp.getValue();
+            String key = temp.getKey();
+            String keyTemp = key.toUpperCase();
+
+            //如果value是集合类型深度递归继续处理
+            if(value instanceof List){
+                List<Map> list = (List<Map>)value;
+                List<Map> list1 = new ArrayList<Map>();
+                for(Map temp1 : list){
+                    Map tempMap1 = dealMapTrimQuantityZero(temp1);
+                    list1.add(tempMap1);
+                }
+                dealedMap.put(key, list1);
+            }else if(value instanceof Map){
+                Map temp2 = dealMapTrimQuantityZero((Map)value);
+                dealedMap.put(key, temp2);
+            }else if(null == value){
+                dealedMap.put(key,"");
+            }else if (keyTemp.contains("QUANTITY")){
+                String num = value.toString();
+                if(num.indexOf(".") > 0){
+                    num = num.replaceAll("0+?$", "");//去掉尾部多余的0
+                    num = num.replaceAll("[.]$", "");//如最后一位是.则去掉
+                }
+                dealedMap.put(key, num);
+            }else{
+                dealedMap.put(key, value);
+            }
+        }
+        return dealedMap;
     }
 
     private static int getIntValue(String str) {

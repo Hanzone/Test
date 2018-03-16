@@ -12,12 +12,12 @@ import java.util.Map;
  */
 public class Father {
 
-//    Father() {
-//        System.out.println("Father");
-//    }
-//    Father(String s) {
-//        System.out.println(s);
-//    }
+    Father() {
+        System.out.println("Father");
+    }
+    Father(String s) {
+        System.out.println(s);
+    }
 
     static {
         System.out.println("Father init");
